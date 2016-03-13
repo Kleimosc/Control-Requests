@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -128,11 +129,66 @@ public class RequestController {
 	  
 	  @RequestMapping(value="/update", method=RequestMethod.POST, consumes="application/json")
 		@ResponseBody
-		public  String update(@RequestBody Long id) {
+		public  Map<String, String> update(@RequestBody Long id) {
 			Request request = requestService.getById(id);
-			System.out.println(request);
-			return "OK";
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("id", request.getId().toString());
+			map.put("title", request.getTitle());
+			map.put("description", request.getDescription());
+			String[] date = request.getDate().toString().split("-");
+			map.put("date", date[2] + "."+ date[1] + "." + date[0]);
+			map.put("status", request.getStatus().toString());
+			return map;
 		}
 	
-	
+		@RequestMapping(value="/edit", method=RequestMethod.POST, consumes="application/json")
+		@ResponseBody
+		public  String edit(@RequestBody HashMap<String, String> map) {
+			
+			long id = Long.parseLong(map.get("id"));
+			Request request = requestService.getById(id);
+			map.remove("id");
+			User user= (User) org.springframework.security.core.context.SecurityContextHolder
+	                .getContext().getAuthentication().getPrincipal();
+			String lfName = user.getlfName();
+			request.setLfName(lfName);
+			request.setDepartament(user.getDepartaments().toString());
+			
+			for (HashMap.Entry<String, String> entry : map.entrySet()) {
+			    System.out.printf("key = %s, value = %s\r\n", entry.getKey(), entry.getValue());
+			    if (entry.getKey().equals("description")){
+			    	request.setDescription(entry.getValue());
+			    }else if (entry.getKey().equals("title")) {
+					request.setTitle(entry.getValue());
+				}else if (entry.getKey().equals("status")) {
+					
+					List<Status> status = requestService.getAllStatus();
+					for (Status status2 : status) {
+						if (status2.toString().equals(entry.getValue())) {
+							request.setStatus(status2);
+							break;
+						}
+					}
+				}else if (entry.getKey().equals("date")){
+					
+					String[] d = entry.getValue().split("\\.");
+					
+					DateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
+					try {
+						Date date = formatter.parse(d[2]+"."+d[1]+"."+d[0]);
+						request.setDate(date);
+					} catch (ParseException e) {
+						
+						e.printStackTrace();
+					}
+					
+					
+				
+				}
+			}
+		    requestService.update(request);
+		 
+			
+			return "OK";
+		}
 }

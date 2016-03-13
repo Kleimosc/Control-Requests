@@ -21,7 +21,6 @@
 <link rel="stylesheet" href='<c:url value="/css/bootstrap-select.min.css"/>'/>
 <link rel="stylesheet" href='<c:url value="/css/table.css"/>'/>
 <link rel="stylesheet" href='<c:url value="/css/loginform.css"/>'/>
-
 <link rel="stylesheet" href='<c:url value="/css/bootstrap-datepicker.css"/>'/>
 
 
@@ -32,8 +31,51 @@
 <title>Control-Request</title>
 </head>
 <body>
-	
-	
+	<!-- Edit button -->
+	<script>
+		$(document).ready(function() {
+			function funcBefore() {
+			}
+
+			function funcSuccess() {
+				location.reload();
+			}
+
+			$("#editClick").bind("click", function() {
+				var edit = {
+					id : $("#editId").text(),
+					title : $("#editTitle").val(),
+					description : $("#editDescription").val(),
+					date : $("#editDate").val(),
+					status : $("#editStatus").val()
+				}
+				
+				
+
+				var edit1 = JSON.stringify(edit);
+				
+				$.ajax({
+					url : "<c:url value="/request/edit"/>",
+					contentType : 'application/json',
+					data : edit1,
+					type : 'POST',
+					beforeSend : funcBefore,
+					success : funcSuccess,
+					error : function(xhr, status, errorThrown) {
+						alert('add request failed' + status + errorThrown);
+					}
+				});
+			});
+
+			$(function() {
+				var token = $("meta[name='_csrf']").attr("content");
+				var header = $("meta[name='_csrf_header']").attr("content");
+				$(document).ajaxSend(function(e, xhr, options) {
+					xhr.setRequestHeader(header, token);
+				});
+			});
+		});
+	</script>
 	
 	
 	
@@ -55,7 +97,7 @@
 					status : $("#requestStatus").val()
 				}
 				
-				console.log(request.title);
+				
 
 				var request1 = JSON.stringify(request);
 
@@ -89,6 +131,10 @@
 			<h3>Hello, ${name}</h3>
 			<div class="navbar navbar-inverse">
 				<div class="collapse navbar-collapse js-navbar-collapse">
+					<ul class="nav navbar-nav js-nav-add-active-class">
+           				<li><a href="<c:url value="/"/>"><span class="glyphicon glyphicon-home"></span> </a></li>
+           			</ul>
+           			
 					<ul class="nav navbar-nav navbar-right">
 						<li class="dropdown">
 						<a href="#" class="dropdown-toggle"
@@ -179,17 +225,23 @@
 										</c:otherwise>
 									</c:choose>
 								<td class="text-center col-xs-2">
-									<button id="editButton${request.id}" data-edit-id = "${request.id}" class='btn btn-info btn-xs'><span class="glyphicon glyphicon-edit"></span> Edit</button> 
+									<button id="editButton${request.id}"  class='btn btn-info btn-xs'><span class="glyphicon glyphicon-edit"></span> Edit</button> 
 														
 														
-													<!-- Update row on Create -->
+													<!-- Update row on Create list-->
 													<script>
 														$(document).ready(function() {
 															function funcBefore() {
 															}
 													
-															function funcSuccess() {
-																alert("OK");
+															function funcSuccess(data) {
+																$('#editModal').modal('show');
+																
+																   $("#editDescription").text(data.description);
+																   $("#editDate").val(data.date);
+																   $("#editTitle").val(data.title);
+																   $("select#editStatus").val(data.status);
+																   $("#editId").text(data.id);
 															}
 													
 															$("#editButton${request.id}").bind("click", function() {
@@ -198,7 +250,7 @@
 																var edit = ${request.id};
 																var edit1 = JSON.stringify(edit);
 																 
-																console.log(edit1); 
+																
 																$.ajax({
 																	url : "<c:url value="/request/update"/>",
 																	contentType : 'application/json',
@@ -207,7 +259,7 @@
 																	beforeSend : funcBefore,
 																	success : funcSuccess,
 																	error : function(xhr, status, errorThrown) {
-																		alert('edit request failed' + status + errorThrown);
+																		alert('edit request failed ' + status + errorThrown);
 																	}
 																});
 															});
@@ -282,10 +334,56 @@
 										</c:otherwise>
 									</c:choose>
 								<td class="text-center col-xs-2">
-									<a
-									class='btn btn-info btn-xs' href="#"><span
-										class="glyphicon glyphicon-edit"></span> Edit</a> <a href="#"
-									data-toggle="modal" data-target="#confimModal${request.id}"
+									<button id="editButton${request.id}"  class='btn btn-info btn-xs'><span class="glyphicon glyphicon-edit"></span> Edit</button> 
+									<!-- Update row on Processing list-->
+													<script>
+														$(document).ready(function() {
+															function funcBefore() {
+															}
+													
+															function funcSuccess(data) {
+																$('#editModal').modal('show');
+																
+																   $("#editDescription").text(data.description);
+																   $("#editDate").val(data.date);
+																   $("#editTitle").val(data.title);
+																   $("select#editStatus").val(data.status);
+																   $("#editId").text(data.id);
+															}
+													
+															$("#editButton${request.id}").bind("click", function() {
+																
+																
+																var edit = ${request.id};
+																var edit1 = JSON.stringify(edit);
+																 
+																
+																$.ajax({
+																	url : "<c:url value="/request/update"/>",
+																	contentType : 'application/json',
+																	data : edit1,
+																	type : 'POST',
+																	beforeSend : funcBefore,
+																	success : funcSuccess,
+																	error : function(xhr, status, errorThrown) {
+																		alert('edit request failed ' + status + errorThrown);
+																	}
+																});
+															});
+													
+															
+															$(function() {
+																var token = $("meta[name='_csrf']").attr("content");
+																var header = $("meta[name='_csrf_header']").attr("content");
+																$(document).ajaxSend(function(e, xhr, options) {
+																	xhr.setRequestHeader(header, token);
+																});
+															});
+														});
+													</script>
+														
+									
+									<a href="#"	data-toggle="modal" data-target="#confimModal${request.id}"
 									class="btn btn-danger btn-xs"><span
 										class="glyphicon glyphicon-remove"></span> Del</a>
 									<form name="form${request.id}" method="POST"
@@ -342,7 +440,54 @@
 										</c:otherwise>
 									</c:choose>
 								<td class="text-center col-xs-2">
-									<a class='btn btn-info btn-xs' href="#"><span class="glyphicon glyphicon-edit"></span> Edit</a> 
+										<button id="editButton${request.id}"  class='btn btn-info btn-xs'><span class="glyphicon glyphicon-edit"></span> Edit</button> 
+										
+										<!-- Update row on Processing list-->
+													<script>
+														$(document).ready(function() {
+															function funcBefore() {
+															}
+													
+															function funcSuccess(data) {
+																$('#editModal').modal('show');
+																
+																   $("#editDescription").text(data.description);
+																   $("#editDate").val(data.date);
+																   $("#editTitle").val(data.title);
+																   $("select#editStatus").val(data.status);
+																   $("#editId").text(data.id);
+															}
+													
+															$("#editButton${request.id}").bind("click", function() {
+																
+																
+																var edit = ${request.id};
+																var edit1 = JSON.stringify(edit);
+																 
+																
+																$.ajax({
+																	url : "<c:url value="/request/update"/>",
+																	contentType : 'application/json',
+																	data : edit1,
+																	type : 'POST',
+																	beforeSend : funcBefore,
+																	success : funcSuccess,
+																	error : function(xhr, status, errorThrown) {
+																		alert('edit request failed ' + status + errorThrown);
+																	}
+																});
+															});
+													
+															
+															$(function() {
+																var token = $("meta[name='_csrf']").attr("content");
+																var header = $("meta[name='_csrf_header']").attr("content");
+																$(document).ajaxSend(function(e, xhr, options) {
+																	xhr.setRequestHeader(header, token);
+																});
+															});
+														});
+													</script>
 									
 									<a href="#" data-toggle="modal" data-target="#confimModal${request.id}"
 									class="btn btn-danger btn-xs"><span
@@ -378,14 +523,11 @@
 								</td>
 							</tr>
 						</c:forEach>
-					
 					</tbody>
 				</table>
 			</div>
 		</div>
 	</div>
-
-
 	<div class="modal fade" id="descripModal" tabindex="-1" role="dialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -472,8 +614,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button class="close" type="button" data-dismiss="modal">x</button>
-				<h4 class="modal-title" id="edit
-				ID">Edit</h4>
+				<h4 class="modal-title" ><div id="editId"></div></h4>
 			</div>
 			<div class="modal-body">
 				<form name="editForm" method="POST" >
@@ -493,7 +634,7 @@
 							<p>Date:</p>
 							<div class="form-group">
 								<div class='input-group date' id='datetimepicker2'>
-									<input id="editDate"  type='text' class="form-control" value="" readonly>
+									<input id="editDate"  type='text' class="form-control"  readonly>
 									<span class="input-group-addon"> <span
 										class="glyphicon glyphicon-calendar"></span>
 									</span>
@@ -505,9 +646,9 @@
 					<div class="row">
 						<div class="col-xs-4">
 							<p>Status:</p>
-							<select id='edittStatus' class="selectpicker form-control">
+							<select class="selectpicker form-control" id='editStatus' >
 								<c:forEach items="${status}" var="status">
-									<option>${status.title}</option>
+									<option value="${status.title}">${status.title}</option>
 								</c:forEach>
 							</select> 
 						</div>

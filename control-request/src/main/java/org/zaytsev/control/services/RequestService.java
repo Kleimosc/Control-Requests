@@ -32,6 +32,12 @@ public class RequestService {
 	}
 	
 	@Transactional
+	public void update(Request request){
+		requestDao.update(request);
+	}
+	
+	
+	@Transactional
 	public	List<Request> getAll(){
 		return requestDao.getAll();
 	}
