@@ -22,6 +22,10 @@ public class UserService implements UserDetailsService {
 	public UserService() {
 		
 	}
+	@Transactional
+	public void saveUser(User user){
+		userDao.add(user);
+	}
 	
 	@Transactional
 	public List<User> getAll(){
@@ -33,7 +37,7 @@ public class UserService implements UserDetailsService {
 	@Transactional
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		System.out.println(userDao);
+		
 		User user = userDao.getByUsername(username);
 		
 		System.out.println(user);

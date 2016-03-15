@@ -53,6 +53,7 @@ public abstract class HibernateAbstractDao<T extends Model> {
 	public void update(T model) {
 		getSession().merge(model);
 		
+		
 	}
 
 	

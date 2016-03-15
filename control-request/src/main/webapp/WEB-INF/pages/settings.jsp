@@ -2,6 +2,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -65,9 +66,64 @@
 	</div>
 	
 	<div class="container">
-	<hr>
-	
-	
+		<hr>
+	<div class="row">	
+		<div class="col-md-3">	
+			<p>Your id: ${id}</p>
+			<p>Your departament: ${departament}</p>
+		</div>
 	</div>
+	<br>
+	<form  method="POST" action="<c:url value="/settings/change"/>" >
+	  	<div class="row">	
+			<div class="col-md-3">	
+		  		<select class="form-control" id="dep" name="id">
+		  		<c:forEach items="${departaments}" var="departaments">
+		  				<option value="${departaments.id}">${departaments}</option>
+		  		</c:forEach>
+		    	</select>
+	    </div>
+	    <button class="btn btn-success" type="submit">Change</button>
+	    </div>
+	    
+	    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token }" />
+	</form>
+	<br>
+	<p>Add departament</p>
+	<form  method="POST" action="<c:url value="/settings/add-dep"/>" >
+	  	<div class="row">	
+			<div class="col-md-3">
+	  			<input class="form-control " name="titleDep">
+	    	</div>
+	    	<button class="btn btn-success" type="submit">Add</button>
+	    </div>
+	    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token }" />
+	</form>
+	<br>
+	<p>Delete departament</p>
+	<form  method="POST" action="<c:url value="/settings/delete-dep"/>" >
+	  	<div class="row">	
+			<div class="col-md-3">	
+		  		<select class="form-control" name="id">
+		  		<c:forEach items="${departaments}" var="departaments">
+		  				<option value="${departaments.id}">${departaments}</option>
+		  		</c:forEach>
+		    	</select>
+	    </div>
+	    <button class="btn btn-danger" type="submit">Delete</button>
+	    </div>
+	    
+	    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token }" />
+	</form>
+	<br>
+	<p>Delete your account!<p>
+	</div>
+	
+	
+	
+	<script>
+		$("select#dep").val("${departament.id}");
+	</script>
+	
 </body>
 </html>

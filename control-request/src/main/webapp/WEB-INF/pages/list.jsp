@@ -14,11 +14,9 @@
 <script type="text/javascript" src='<c:url value="/js/moment-with-locales.min.js"/>'></script>
 <script type="text/javascript" src='<c:url value="/js/list-acc.js"/>'></script>
 <script type="text/javascript" src='<c:url value="/js/bootstrap-datepicker.min.js"/>'></script>
-<script type="text/javascript" src='<c:url value="/js/bootstrap-select.min.js"/>'></script>
 <script type="text/javascript" src='<c:url value="/js/table.js"/>'></script>
 <script type="text/javascript" src='<c:url value="/js/autoresize.js"/>'></script>
 <link rel="stylesheet" href='<c:url value="/css/bootstrap.min.css"/>'/>
-<link rel="stylesheet" href='<c:url value="/css/bootstrap-select.min.css"/>'/>
 <link rel="stylesheet" href='<c:url value="/css/table.css"/>'/>
 <link rel="stylesheet" href='<c:url value="/css/loginform.css"/>'/>
 <link rel="stylesheet" href='<c:url value="/css/bootstrap-datepicker.css"/>'/>
@@ -282,8 +280,7 @@
 										class="glyphicon glyphicon-remove"></span> Del</a>
 									<form name="form${request.id}" method="POST"
 										action="<c:url value="/request/delete/${request.id}"/>">
-										<input type="hidden" name="${_csrf.parameterName}"
-											value="${_csrf.token }" />
+										<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token }" />
 									</form>
 
 									<div class="modal fade" id="confimModal${request.id}"
@@ -646,7 +643,7 @@
 					<div class="row">
 						<div class="col-xs-4">
 							<p>Status:</p>
-							<select class="selectpicker form-control" id='editStatus' >
+							<select class="form-control" id='editStatus' >
 								<c:forEach items="${status}" var="status">
 									<option value="${status.title}">${status.title}</option>
 								</c:forEach>

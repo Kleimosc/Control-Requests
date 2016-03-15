@@ -71,7 +71,7 @@ public class User extends Model implements UserDetails {
 		this.roles = roles;
 	}
 	
-	@ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.REFRESH })
+	@ManyToOne()
 	@JoinColumn(name="fk_departaments_id")
 	private Departaments departaments;
 	

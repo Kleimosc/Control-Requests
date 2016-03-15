@@ -25,7 +25,7 @@ public class Departaments extends Model{
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	@OneToMany(mappedBy="departaments", cascade=CascadeType.ALL, orphanRemoval= true)
+	@OneToMany(mappedBy="departaments", cascade = {CascadeType.PERSIST,CascadeType.REFRESH, CascadeType.MERGE})
 	private Set<User> users = new HashSet<>();
 	
 	public Set<User> getUsers() {
