@@ -33,8 +33,7 @@
 					<ul class="nav navbar-nav navbar-right">
 						<li class="dropdown">
 						<a href="#" class="dropdown-toggle"
-							data-toggle="dropdown" role="button" aria-expanded="true">My
-								account <span class="caret"></span>
+							data-toggle="dropdown" role="button" aria-expanded="true">My account <span class="caret"></span>
 						</a>
 							<ul class="dropdown-menu" role="menu">
 								<li><a href="#">Action</a></li>
@@ -49,7 +48,7 @@
 									onClick="document.forms['formout'].submit()"> <span
 										class="glyphicon glyphicon-off"></span> Exit
 								</a>
-									<form name="formout" method="POST"
+									<form id="formout" name="formout" method="POST"
 										action="<c:url value="/logouth"/>">
 										<input type="hidden" name="${_csrf.parameterName}"
 											value="${_csrf.token }" />
@@ -70,7 +69,7 @@
 	<div class="row">	
 		<div class="col-md-3">	
 			<p>Your id: ${id}</p>
-			<p>Your departament: ${departament}</p>
+			<p>Your department: ${departament}</p>
 		</div>
 	</div>
 	<br>
@@ -89,7 +88,8 @@
 	    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token }" />
 	</form>
 	<br>
-	<p>Add departament</p>
+	
+	<p>Add department:</p>
 	<form  method="POST" action="<c:url value="/settings/add-dep"/>" >
 	  	<div class="row">	
 			<div class="col-md-3">
@@ -100,7 +100,7 @@
 	    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token }" />
 	</form>
 	<br>
-	<p>Delete departament</p>
+	<p>Delete department:</p>
 	<form  method="POST" action="<c:url value="/settings/delete-dep"/>" >
 	  	<div class="row">	
 			<div class="col-md-3">	
@@ -116,9 +116,78 @@
 	    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token }" />
 	</form>
 	<br>
-	<p>Delete your account!<p>
-	</div>
 	
+	<p><a href="#"  data-toggle="modal" data-target="#deleteModal">Delete my account!</a></p><div id="information"></div>
+	
+	
+	</div>
+
+	<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog"
+		aria-labelledby="deleteModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-sm" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Closed">
+						<span aria-hidden="true">×</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">Delete my account!</h4>
+				</div>
+				<div class="modal-body">
+					<p>Enter your id:</p>
+					<input id="enterId" type="text" class="form-control">
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Closed</button>
+					<button id="buttonDelete" type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<script>
+		$(document).ready(function() {
+			function funcBefore() {
+				$("#information").text ("Wait..");
+			}
+
+			function funcSuccess(status) {
+				console.log(status)
+			
+				if (status == "EXIT") {
+					$('#formout').submit();
+				} else {
+					$("#information").html("<font color="+"red"+">"+"<b>Wrong</b>");
+				}
+			}
+
+			$("#buttonDelete").bind("click", function() {
+				var delAcc = $("#enterId").val();
+
+				$.ajax({
+					url : "<c:url value="/settings/deleteAcc"/>",
+					contentType : 'application/json',
+					data : delAcc,
+					type : 'POST',
+					beforeSend : funcBefore,
+					success : funcSuccess,
+					error : function(xhr, status, errorThrown) {
+						alert('Delete request failed' + status + errorThrown);
+					}
+				});
+			});
+
+			$(function() {
+				var token = $("meta[name='_csrf']").attr("content");
+				var header = $("meta[name='_csrf_header']").attr("content");
+				$(document).ajaxSend(function(e, xhr, options) {
+					xhr.setRequestHeader(header, token);
+				});
+			});
+		});
+	</script>
 	
 	
 	<script>

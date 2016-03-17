@@ -31,6 +31,12 @@ public class SettingsService {
 		userDao.update(user);
 	}
 	
+	@Transactional
+	public void removeUser(Long id){
+		User user = userDao.getById(id);
+		userDao.remove(user);
+	}
+	
 	
 	@Transactional
 	public Departaments depGetById(Long id){

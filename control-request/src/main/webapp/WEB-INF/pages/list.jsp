@@ -140,9 +140,10 @@
 								account <span class="caret"></span>
 						</a>
 							<ul class="dropdown-menu" role="menu">
-								<li><a href="#">Action</a></li>
-								<li><a href="<c:url value="all-list"/>"><span
+								<sec:authorize access="hasRole('ROLE_ADMIN')">
+								<li><a href="<c:url value="/request/all-list"/>"><span
 										class="glyphicon glyphicon-file"></span> All requests</a></li>
+								</sec:authorize>
 								<li><a href="<c:url value="/settings"/>"> <span
 										class="glyphicon glyphicon-cog"></span> Settings
 								</a></li>
@@ -162,10 +163,8 @@
 						</li>
 					</ul>
 				</div>
-
 			</div>
 		</div>
-
 	</div>
 
 	<div class="container">
@@ -192,7 +191,7 @@
 							<th><input type="text" class="form-control"
 								placeholder="Employee" disabled></th>
 							<th><input type="text" class="form-control"
-								placeholder="Departament" disabled></th>
+								placeholder="Department" disabled></th>
 							<th><input type="text" class="form-control"
 								placeholder="Time" disabled></th>
 							<th><input type="text" class="form-control"
@@ -439,7 +438,7 @@
 								<td class="text-center col-xs-2">
 										<button id="editButton${request.id}"  class='btn btn-info btn-xs'><span class="glyphicon glyphicon-edit"></span> Edit</button> 
 										
-										<!-- Update row on Processing list-->
+										<!-- Update row on Closed list-->
 													<script>
 														$(document).ready(function() {
 															function funcBefore() {

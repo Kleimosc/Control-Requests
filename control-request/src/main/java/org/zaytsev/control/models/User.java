@@ -59,7 +59,7 @@ public class User extends Model implements UserDetails {
 		this.password = password;
 	}
 
-	@ManyToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@ManyToMany(fetch=FetchType.EAGER, cascade = {CascadeType.PERSIST,CascadeType.REFRESH, CascadeType.MERGE})
 	@JoinTable(name="user_role", joinColumns=@JoinColumn(name="user_id", nullable=false, updatable=false),
 	inverseJoinColumns=@JoinColumn(name="role_id", nullable=false, updatable=false))
 	private Set<Role> roles = new HashSet<Role>();

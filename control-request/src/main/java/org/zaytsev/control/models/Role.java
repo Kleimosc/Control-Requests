@@ -7,9 +7,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 
 @Entity
@@ -18,15 +18,15 @@ public class Role extends Model{
 
 	private static final long serialVersionUID = -625343403048740351L;
 	
-	@NotNull
+	
 	@Enumerated(EnumType.STRING)
-	@Column(name="title", length=25, insertable=false, updatable=false)
+	@Column(name="title")
 	private RoleList title;
 	
 	@Column(name="description", length=25)
 	private String description;
 	
-	@ManyToMany(mappedBy="roles")
+	@ManyToMany(fetch=FetchType.EAGER, mappedBy="roles")
 	private Set<User> users = new HashSet<>();
 	
 	

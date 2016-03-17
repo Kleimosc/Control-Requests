@@ -40,7 +40,7 @@ public class UserService implements UserDetailsService {
 		
 		User user = userDao.getByUsername(username);
 		
-		System.out.println(user);
+		System.err.println(user);
 		if(user == null){
 			throw new UsernameNotFoundException("User with Username: " + username + " not found");
 			

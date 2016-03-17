@@ -85,6 +85,9 @@ http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd">
     <property name="minIdle" value="2" />
 </bean>
 
+<security:global-method-security secured-annotations="enabled" pre-post-annotations="enabled" />
+<security:debug/>
+
 <security:http pattern="/resources/**" security="none" />
 <security:http pattern="/css/**" security="none" />
 <security:http pattern="/js/**" security="none" />
@@ -98,6 +101,8 @@ http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd">
 		password-parameter="password" default-target-url="/request/list"
 		always-use-default-target="true" authentication-failure-url="/login?error=invalidLoginPassword"/>
 	<security:intercept-url pattern="/request/list" access="isAuthenticated()"/>
+	<security:intercept-url pattern="/settings/" access="isAuthenticated()"/>
+	<security:intercept-url pattern="/request/all-list" access="isAuthenticated()"/>
 	<security:intercept-url pattern="/" access="isAuthenticated()"/>
 	<security:logout logout-url="/logouth" delete-cookies="	JSESSIONID" invalidate-session="true" />
 	<security:remember-me  user-service-ref="userService"  key="controlKey" token-validity-seconds="864000" remember-me-parameter="ControlRequest"  />
@@ -114,10 +119,11 @@ http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd">
 	</security:authentication-provider>
 </security:authentication-manager>
 
+
+
 <bean id ="roleVoter" class="org.springframework.security.access.vote.RoleVoter">
 	<property name="rolePrefix" value=""/>
-
-</bean> 
+</bean>
 
 
 

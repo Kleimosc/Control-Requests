@@ -5,9 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.zaytsev.control.models.Departaments;
 import org.zaytsev.control.models.User;
@@ -65,6 +67,27 @@ public class SettingsController {
 		settingsService.updateUserDep(departaments);
 		settingsService.depDelete(departaments);
 		return "redirect:/settings/";
+	}
+	
+	
+	@RequestMapping(value="/settings/deleteAcc", method=RequestMethod.POST)
+	@ResponseBody
+	public String deleteAcc(@RequestBody String id){
+		
+		User user= (User) org.springframework.security.core.context.SecurityContextHolder
+                .getContext().getAuthentication().getPrincipal();
+		if (user.getId().toString().equals(id)){
+			settingsService.removeUser(Long.parseLong(id));
+			
+			return "EXIT";
+		}else {
+			return "OK";
+		}
+		
+		
+		
+		
+		
 	}
 
 }
