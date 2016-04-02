@@ -36,9 +36,10 @@
 							data-toggle="dropdown" role="button" aria-expanded="true">My account <span class="caret"></span>
 						</a>
 							<ul class="dropdown-menu" role="menu">
-								<li><a href="#">Action</a></li>
+								<sec:authorize access="hasRole('ROLE_ADMIN')">
 								<li><a href="<c:url value="all-list"/>"><span
 										class="glyphicon glyphicon-file"></span> All requests</a></li>
+								</sec:authorize>
 								<li><a href="<c:url value="/settings"/>"> <span
 										class="glyphicon glyphicon-cog"></span> Settings
 								</a></li>
@@ -88,7 +89,7 @@
 	    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token }" />
 	</form>
 	<br>
-	
+	<sec:authorize access="hasRole('ROLE_ADMIN')">
 	<p>Add department:</p>
 	<form  method="POST" action="<c:url value="/settings/add-dep"/>" >
 	  	<div class="row">	
@@ -116,7 +117,7 @@
 	    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token }" />
 	</form>
 	<br>
-	
+	</sec:authorize>
 	<p><a href="#"  data-toggle="modal" data-target="#deleteModal">Delete my account!</a></p><div id="information"></div>
 	
 	

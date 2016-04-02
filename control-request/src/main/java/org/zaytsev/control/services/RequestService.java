@@ -42,6 +42,23 @@ public class RequestService {
 		return requestDao.getAll();
 	}
 	
+	// list name
+	@Transactional
+	public	List<Request> getListNameCreate(){
+		return requestDao.getListNameCreate();
+	}
+	
+	@Transactional
+	public	List<Request> getListNameProcessing(){
+		return requestDao.getListNameProcessing();
+	}
+	
+	@Transactional
+	public	List<Request> getListNameClosed(){
+		return requestDao.getListNameClosed();
+	}
+	
+	//all-list
 	@Transactional
 	public	List<Request> getListCreate(){
 		return requestDao.getListCreate();

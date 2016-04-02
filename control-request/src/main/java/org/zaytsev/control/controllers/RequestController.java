@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.zaytsev.control.models.Request;
-import org.zaytsev.control.models.Role;
 import org.zaytsev.control.models.Status;
 import org.zaytsev.control.models.User;
 import org.zaytsev.control.services.RequestService;
@@ -45,14 +44,10 @@ public class RequestController {
 		ModelAndView modelAndView = new ModelAndView();
 		User user= (User) org.springframework.security.core.context.SecurityContextHolder
                 .getContext().getAuthentication().getPrincipal();
-		for (Role id : user.getRoles()) {
-			System.err.println(id.getTitle());
-		}
-		
 		String lfName = user.getlfName();
-		List<Request> requestCreate = requestService.getListCreate();
-		List<Request> requestProcessing = requestService.getListProcessing();
-		List<Request> requestClosed = requestService.getListClosed();
+		List<Request> requestCreate = requestService.getListNameCreate();
+		List<Request> requestProcessing = requestService.getListNameProcessing();
+		List<Request> requestClosed = requestService.getListNameClosed();
 		List<Status> status = requestService.getAllStatus();
 		modelAndView.addObject("name", lfName);
 		modelAndView.addObject("requestCreate", requestCreate);
@@ -78,7 +73,7 @@ public class RequestController {
 		modelAndView.addObject("requestProcessing", requestProcessing);
 		modelAndView.addObject("requestClosed", requestClosed);
 		modelAndView.addObject("status", status);
-		modelAndView.setViewName("list");
+		modelAndView.setViewName("all-list");
 		return modelAndView;
 	}
 	

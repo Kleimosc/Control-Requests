@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,7 +31,7 @@ public class User extends Model implements UserDetails {
 	private static final long serialVersionUID = 2957014868411207052L;
 
 	@NotNull
-	@Column(name="username",length=40)
+	@Column(name="username", unique=true, length=40)
 	private String username;
 	
 	@Column(name="password", length=64)
@@ -38,7 +39,19 @@ public class User extends Model implements UserDetails {
 	
 	@Column(name="lfname", length=25)
 	private String lfName;
+	
+	@org.hibernate.annotations.Type(type="true_false")
+	@NotNull
+	boolean activated;
 		
+	
+	
+	public boolean isActivated() {
+		return activated;
+	}
+	public void setActivated(boolean activated) {
+		this.activated = activated;
+	}
 	public String getlfName() {
 		return lfName;
 	}
@@ -112,7 +125,11 @@ public class User extends Model implements UserDetails {
 	@Override
 	public boolean isAccountNonExpired() {
 		
-		return true;
+		if (this.activated == true){
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 	@Override
@@ -129,8 +146,8 @@ public class User extends Model implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		
 		return true;
+		
 	}
 	
 	

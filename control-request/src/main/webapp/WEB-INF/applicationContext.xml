@@ -85,8 +85,8 @@ http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd">
     <property name="minIdle" value="2" />
 </bean>
 
-<security:global-method-security secured-annotations="enabled" pre-post-annotations="enabled" />
-<security:debug/>
+<!--  <security:global-method-security secured-annotations="enabled" pre-post-annotations="enabled" />
+<security:debug/> -->
 
 <security:http pattern="/resources/**" security="none" />
 <security:http pattern="/css/**" security="none" />
@@ -103,6 +103,8 @@ http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd">
 	<security:intercept-url pattern="/request/list" access="isAuthenticated()"/>
 	<security:intercept-url pattern="/settings/" access="isAuthenticated()"/>
 	<security:intercept-url pattern="/request/all-list" access="isAuthenticated()"/>
+	<security:intercept-url pattern="/registration" access="isAnonymous()"/>
+	<security:intercept-url pattern="/request/all-list" access="hasRole('ADMIN')"/>
 	<security:intercept-url pattern="/" access="isAuthenticated()"/>
 	<security:logout logout-url="/logouth" delete-cookies="	JSESSIONID" invalidate-session="true" />
 	<security:remember-me  user-service-ref="userService"  key="controlKey" token-validity-seconds="864000" remember-me-parameter="ControlRequest"  />
@@ -125,8 +127,22 @@ http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd">
 	<property name="rolePrefix" value=""/>
 </bean>
 
+<!-- SEND MAIL  -->
 
-
+<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="smtp.gmail.com"/>
+        <property name="port" value="25"/>
+        <property name="username" value="kleimosc@gmail.com"/>
+        <property name="password" value="*******"/>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.transport.protocol">smtp</prop>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+                <prop key="mail.debug">true</prop>
+            </props>
+        </property>
+</bean>
 
 
 </beans>

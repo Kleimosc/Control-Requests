@@ -1,7 +1,7 @@
 package org.zaytsev.control.models;
 
 public enum RoleList {
-	ADMIN, USER;
+	ROLE_ADMIN, ROLE_USER;
 	
 	RoleList(){
 		

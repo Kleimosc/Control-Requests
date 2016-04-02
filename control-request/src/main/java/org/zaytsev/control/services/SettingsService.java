@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.zaytsev.control.dao.DepartamentsDao;
 import org.zaytsev.control.dao.UserDao;
+import org.zaytsev.control.dao.VerificationTokenDao;
 import org.zaytsev.control.models.Departaments;
 import org.zaytsev.control.models.User;
 
@@ -20,6 +21,10 @@ public class SettingsService {
 	@Autowired
 	@Qualifier(value="userDatabaseDao")
 	private UserDao userDao;
+	
+	@Autowired
+	@Qualifier("verificationTokenDatabaseDao")
+	VerificationTokenDao verificationTokenDao;
 	
 		
 	public SettingsService(){
@@ -34,6 +39,7 @@ public class SettingsService {
 	@Transactional
 	public void removeUser(Long id){
 		User user = userDao.getById(id);
+		verificationTokenDao.removeToken(user);
 		userDao.remove(user);
 	}
 	
@@ -68,6 +74,8 @@ public class SettingsService {
 	public User getByUser(Long id){
 		return userDao.getById(id);
 	}
+	
+	
 	
 
 }

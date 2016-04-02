@@ -77,6 +77,8 @@ public class SettingsController {
 		User user= (User) org.springframework.security.core.context.SecurityContextHolder
                 .getContext().getAuthentication().getPrincipal();
 		if (user.getId().toString().equals(id)){
+			
+			
 			settingsService.removeUser(Long.parseLong(id));
 			
 			return "EXIT";
